@@ -11,8 +11,10 @@ import {
   DotsCircleHorizontalIcon,
   DotsHorizontalIcon,
 } from "@heroicons/react/outline";
+import { signOut, useSession } from "next-auth/react";
 
 function Sidebar() {
+  const { data: session } = useSession();
   return (
     <div
       className="hidden sm:flex flex-col items-center 
@@ -37,14 +39,14 @@ function Sidebar() {
           Tweet
         </button>
         <div className="text-[#d9d9d9] flex items-center
-        justify-center hoverAnimation xl:ml-auto xl:-mr-5 mt-auto">
-            <img src='https://yt3.ggpht.com/L5osS_nevvgp3_3sHTpkp1vNZjjP8TN1UAJJZmJSFRyMToOpLktYPFe1d2OwgvSuAYRLvpfbGA=s88-c-k-c0x00ffffff-no-rj-mo' 
+        justify-center hoverAnimation xl:ml-auto xl:-mr-5 mt-auto" onClick={signOut}>
+            <img src={session.user.image}
             alt="" 
             className="h-10 w-10 rounded-full xl:mr-2.5"
             />
             <div className="hidden xl:inline leading-5">
-                <h4 className="font-bold">Tony</h4>
-                <p className="text-[#6e767d]">@tony</p>
+                <h4 className="font-bold">{session.user.name}</h4>
+                <p className="text-[#6e767d]">@{session.user.tag}</p>
             </div>
             <DotsHorizontalIcon className="h-5 hidden xl:inline ml-10" />
         </div>
