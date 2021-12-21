@@ -1,13 +1,17 @@
-import Head from 'next/head'
-import Feed from '../components/Feed'
-import Sidebar from '../components/Sidebar'
+import Head from "next/head";
+import Feed from "../components/Feed";
+import Sidebar from "../components/Sidebar";
 import { getProviders, getSession, useSession } from "next-auth/react";
-import Login from '../components/Login';
+import Login from "../components/Login";
+import { useRecoilState } from "recoil";
+import { modalState } from "../atoms/modalAtom";
+import Modal from "../components/Modal";
 
-export default function Home({trendingResults, followResults, providers}) {
-  const {data: session} = useSession();
+export default function Home({ trendingResults, followResults, providers }) {
+  const { data: session } = useSession();
+  const [isOpen, setIsOpen] = useRecoilState(modalState);
 
-if (!session) return <Login providers={providers}/>
+  if (!session) return <Login providers={providers} />;
 
   return (
     <div className="">
@@ -15,17 +19,14 @@ if (!session) return <Login providers={providers}/>
         <title>Clone</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-    <main className='bg-black min-h-screen flex max-w-[1500px] mx-auto'>
-     <Sidebar/>
-     <Feed />
-     {/* {session.user.name} */}
-      {/* feed */}
-      {/* widgets */}
-
-      {/* Modal */}
-    </main>
+      <main className="bg-black min-h-screen flex max-w-[1500px] mx-auto">
+        <Sidebar />
+        <Feed />
+        {/* widgets */}
+        {isOpen && <Modal />}
+      </main>
     </div>
-  )
+  );
 }
 
 export async function getServerSideProps(context) {
